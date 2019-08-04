@@ -5,7 +5,7 @@ Oliver Szavuj
 */
 import java.util.ArrayList;
 public class Main2{
-	public static final int COUNT = 20; 
+	public static final int COUNT = 4000; 
 	public static int used = 0;
 	public static void main(String [] args) {
 		
@@ -24,7 +24,7 @@ public class Main2{
 			contents.remove(nextRand);
 		}
 		
-		
+		//very stupid thing I used to have to check on nodes
 		System.out.println("root " + nodes.root.item);
 		if(nodes.root.left != null) {
 			System.out.println("left1" + nodes.root.left.item);
@@ -77,13 +77,19 @@ public class Main2{
 		nodes.print2D(nodes.root);
 		System.out.println("******************************************");
 		//nodes.print2D(nodes.root);
-		nodes.rightRotate(nodes.root.left);
+		//nodes.rightRotate(nodes.root.left);
 		nodes.print2D(nodes.root);
 		//nodes.print2D(nodes.root);
 		System.out.println("******************************************");
 		System.out.println("******************************************");
-		nodes.scripted();
-
+		//nodes.scripted();
+		for(int i = 0; i < nodes.BinaryNodeArrayList.size(); i++)
+			System.out.println(nodes.BinaryNodeArrayList.get(i).item);
+        //root = tree.sortedArrayToBST(arr, 0, n - 1); 
+        //System.out.println("Preorder traversal of constructed BST"); 
+        //nodes.preOrder(nodes.root); 
+        
+        nodes.print2D(nodes.sortedListToBalancedTree(0,nodes.BinaryNodeArrayList.size()-1)); 
 	}
 	public static int getRandomInt() {
 		int max = COUNT - used; 

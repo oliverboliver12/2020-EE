@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /*Program Information
 Author:
 Oliver Szavuj
@@ -10,6 +12,7 @@ public class NodeFactory2<Item>{
 	public int depth;
 	public int maxDepth;
 	public int spaceCount = 3; 
+	public ArrayList<BinaryNode> BinaryNodeArrayList = new ArrayList<BinaryNode>();
 	
 	
 	public class BinaryNode{
@@ -25,7 +28,11 @@ public class NodeFactory2<Item>{
 			this.parent = parent;
 			this.height = depth;
 		}
-		
+		public BinaryNode(Item newItem){ // I use this for the balancing of my tree
+			this.item = newItem;
+			this.left =null;
+			this.right = null;
+		}
 		public BinaryNode(){
 			this.item =null;
 			this.left =null;
@@ -106,12 +113,10 @@ public class NodeFactory2<Item>{
 	public void printInorder(BinaryNode current){ 
         if (current == null) 
             return; 
-        printInorder(current.left); //left side
+        printInorder(current.left);
         
-        //data
-        System.out.print(current.item + " ");
+        BinaryNodeArrayList.add(current);
   
-        //right side
         printInorder(current.right); 
     }
 	
@@ -132,7 +137,20 @@ public class NodeFactory2<Item>{
 	public void print2D(BinaryNode root){  
 	    print2DUtil(root, 0);  
 	} 
+
 	
+	BinaryNode sortedListToBalancedTree(int start, int end) { 
+		if (start > end) { 
+			return null; 
+		} 
+		int mid = (start + end) / 2; 
+        BinaryNode node = new BinaryNode(BinaryNodeArrayList.get(mid).item); 
+		node.left = sortedListToBalancedTree(start, mid - 1); 
+		node.right = sortedListToBalancedTree(mid + 1, end);   
+		return node; 
+    } 
+  
+      
 	//Flight stuff
 	
 //	public  void treeToVine() {
@@ -155,44 +173,60 @@ public class NodeFactory2<Item>{
 	public int max(int a, int b) { 
         return (a > b) ? a : b; 
     } 
+	public boolean checkConditions(BinaryNode pivot) {
+		if(pivot.parent != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	public void rightRotate(BinaryNode y) {
 		BinaryNode temp = y.parent;
-		y.parent.left = y.right;
-		y.right.parent = y.parent;
-		//y.right = null;
-		y.right = y.parent;
-		//C is free of A
-
-		//SWITCH PARENTS
-		if (temp.item.toString().equals(root.item.toString())) {
-			root = y;
-			System.out.println("aaa");
-		} else if (temp.parent.left.item.toString().equals(temp.item.toString())) {
-			temp.parent.left = y;
-			y.parent = temp.parent;
-		} else {
-			System.out.println("aaa");
-			temp.parent.right = y;
-			y.parent = temp.parent;
-		}
-		
-		public void leftRotate(BinaryNode y) {
-			BinaryNode temp = y.parent;
+		try {
+			y.parent.parent  = y;
 			y.parent.left = y.right;
 			y.right.parent = y.parent;
 			//y.right = null;
 			y.right = y.parent;
+			y.right.right.parent = y.right;
+			y.right.left.parent = y.right;
 			//C is free of A
-
+		} catch(NullPointerException e) {
+			System.out.println("EXCEPTION");
+		}
+		//SWITCH PARENTS
+		if (temp.item.toString().equals(root.item.toString())) {
+			root = y;
+		} else if (temp.parent.left.item.toString().equals(temp.item.toString())) {
+			temp.parent.left = y;
+			y.parent = temp.parent;
+		} else {
+			temp.parent.right = y;
+			y.parent = temp.parent;
+		}
+	}
+		public void leftRotate(BinaryNode y) {
+			BinaryNode temp = y.parent;
+			try {
+				y.parent.parent  = y;
+				
+				y.parent.right = y.left;
+				y.left.parent = y.parent;
+				//y.right = null;
+				y.left = y.parent;
+				y.left.right.parent = y.left;
+				y.left.left.parent = y.left;
+				//C is free of A
+			} catch(NullPointerException e) {
+				System.out.println("EXCEPTION");
+			}
 			//SWITCH PARENTS
 			if (temp.item.toString().equals(root.item.toString())) {
 				root = y;
-				System.out.println("aaa");
 			} else if (temp.parent.left.item.toString().equals(temp.item.toString())) {
 				temp.parent.left = y;
 				y.parent = temp.parent;
 			} else {
-				System.out.println("aaa");
 				temp.parent.right = y;
 				y.parent = temp.parent;
 			}
@@ -205,41 +239,37 @@ public class NodeFactory2<Item>{
 //		[Set Q's parent to P]
     } 
   
-    // A utility function to left rotate subtree rooted with x 
-    // See the diagram given above. 
-	BinaryNode leftRotate(BinaryNode x) { 
-		BinaryNode y = x.right; 
-		BinaryNode T2 = y.left; 
-  
-        // Perform rotation 
-        y.left = x; 
-        x.right = T2; 
-  
-        //  Update heights
-        if(y.left != null && y.right != null)
-        	y.height = max(y.left.height, y.right.height) + 1; 
-        if(x.left != null && x.right != null)
-        	x.height = max(x.left.height, x.right.height) + 1;  
-  
-        // Return new root 
-        return y; 
-    }
+    
 	void scripted(){
+
 		Item b = (Item) "B";
 		Item a = (Item) "A";
 		Item d = (Item) "d";
 		Item c = (Item) "c";
 		Item y = (Item) "y";
+		//Item o = (Item) "o";
+		//Item p = (Item) "p";
 	
 		insertRoot(b);
-		root.left = new BinaryNode(a, root, 2);
+		root.left = new BinaryNode(a, root, 1);
 		root.left.left = new BinaryNode(d, root.left, 3);
 		root.left.right = new BinaryNode(c, root.left, 3);
-		root.right = new BinaryNode(y, root.right, 2);
-		System.out.println("here is the beef:" + root.left.parent.item.toString());
-		print2D(root);
-		rightRotate(root.left);
-		print2D(root);
+		root.right = new BinaryNode(y, root.right, 3);
+		//root.left.right.left = new BinaryNode(o, root.left.right, 4);
+		//root.left.left.right = new BinaryNode(p, root.left.left, 4);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		for(int i = 0 ; i < 1000; i++) {
+			print2D(root);
+			rightRotate(root.left);
+			print2D(root);
+			leftRotate(root.right);
+			print2D(root);
+		}
+		//System.out.println("here is the prob: " + root.left.left.item.toString());
 	}
 	
 }
