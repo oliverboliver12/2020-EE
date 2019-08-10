@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Stack;
 
 /*Program Information
 Author:
@@ -12,14 +13,16 @@ public class NodeFactory2<Item>{
 	public int depth;
 	public int maxDepth;
 	public int spaceCount = 3; 
+	boolean changedRoot = false;
 	public ArrayList<BinaryNode> BinaryNodeArrayList = new ArrayList<BinaryNode>();
+	int nodeCount = 0;
 	
 	
 	public class BinaryNode{
 		public Item item;
-		BinaryNode left;
-		BinaryNode right;
-		BinaryNode parent;
+		BinaryNode left = null;
+		BinaryNode right = null;
+		BinaryNode parent = null;
 		public int height;
 		public BinaryNode(Item newItem, BinaryNode parent, int depth){
 			this.item = newItem;
@@ -103,6 +106,7 @@ public class NodeFactory2<Item>{
 	
 	public void insertRoot(Item newItem) {
 		root = new BinaryNode();
+		root.parent = null;
 		root.item = newItem;
 		root.height = 1;
 		System.out.println("wE IN");
@@ -111,13 +115,16 @@ public class NodeFactory2<Item>{
 
 
 	public void printInorder(BinaryNode current){ 
+		BinaryNode pRoot = new BinaryNode();
         if (current == null) 
             return; 
         printInorder(current.left);
         
         BinaryNodeArrayList.add(current);
+        pRoot.right = current;
   
-        printInorder(current.right); 
+        printInorder(current.right);
+        print2D(pRoot);
     }
 	
 	public void print2DUtil(BinaryNode root, int space)  {   
@@ -181,63 +188,155 @@ public class NodeFactory2<Item>{
 		}
 	}
 	public void rightRotate(BinaryNode y) {
-		BinaryNode temp = y.parent;
-		try {
-			y.parent.parent  = y;
-			y.parent.left = y.right;
-			y.right.parent = y.parent;
-			//y.right = null;
-			y.right = y.parent;
-			y.right.right.parent = y.right;
-			y.right.left.parent = y.right;
-			//C is free of A
-		} catch(NullPointerException e) {
-			System.out.println("EXCEPTION");
-		}
-		//SWITCH PARENTS
-		if (temp.item.toString().equals(root.item.toString())) {
-			root = y;
-		} else if (temp.parent.left.item.toString().equals(temp.item.toString())) {
-			temp.parent.left = y;
-			y.parent = temp.parent;
-		} else {
-			temp.parent.right = y;
-			y.parent = temp.parent;
-		}
-	}
-		public void leftRotate(BinaryNode y) {
-			BinaryNode temp = y.parent;
-			try {
-				y.parent.parent  = y;
+		BinaryNode doubleParent = null;
+		BinaryNode parent = y.parent;
+		BinaryNode yRightChild = y.right;
+		
+//		try {
+			if(y.parent != null) {
+				y.parent = parent.parent;
+				if(parent.parent != null) {
+					doubleParent = parent.parent;
+					System.out.println("ASSIGNED");
+					System.out.println(doubleParent);
+				}
 				
-				y.parent.right = y.left;
-				y.left.parent = y.parent;
-				//y.right = null;
-				y.left = y.parent;
-				y.left.right.parent = y.left;
-				y.left.left.parent = y.left;
-				//C is free of A
-			} catch(NullPointerException e) {
-				System.out.println("EXCEPTION");
 			}
-			//SWITCH PARENTS
-			if (temp.item.toString().equals(root.item.toString())) {
+			parent.parent  = y;
+			parent.left = null;
+			parent.left = yRightChild;
+			//yRightChild.parent = null;
+			//System.out.println("aaaaa" + yRightChild.parent.item);
+			if(yRightChild != null)
+				yRightChild.parent = parent;
+			y.right = parent;
+			//yRightChild = parent;
+			//y.right.right.parent = y.right;
+			//y.right.left.parent = y.right;
+			//C is free of A
+//		} catch(NullPointerException e) {
+//			System.out.println("EXCEPTION");
+//		}
+		//SWITCH PARENTS
+		if (parent.item.toString().equals(root.item.toString())) {
+			System.out.println("changedRoot");
+			changedRoot = true;
+			root.parent = y;
+			root = y;
+		}
+		if(doubleParent != null) {
+			System.out.println("oh yes1: " + doubleParent.item);
+			if(doubleParent.left != null) {
+				System.out.println("oh yes2");
+				if (doubleParent.left.item.toString().compareTo(parent.item.toString()) == 0) {
+					System.out.println("DING2");
+					doubleParent.left = y;
+				}
+			}
+			if(doubleParent.right != null) {
+				System.out.println("oh yes3");
+				 if (doubleParent.right.item.toString().compareTo(parent.item.toString()) == 0){
+					 System.out.println("DING3");
+					 doubleParent.right = y;
+				 }
+			}
+			
+		}
+		
+	}
+	public void leftRotate(BinaryNode y) {
+		BinaryNode doubleParent = null;
+		BinaryNode parent = y.parent;
+		BinaryNode yLeftChild = y.left;
+		
+//		try {
+		if(y.parent != null) {
+			y.parent = parent.parent;
+			if(parent.parent != null) {
+				doubleParent = parent.parent;
+				System.out.println("ASSIGNED");
+				System.out.println(doubleParent);
+			}
+			
+		
+		parent.parent  = y;
+		parent.right = null;
+		parent.right = yLeftChild;
+		//yRightChild.parent = null;
+		//System.out.println("aaaaa" + yRightChild.parent.item);
+		if(yLeftChild != null)
+			yLeftChild.parent = parent;
+		y.left = parent;
+//		} catch(NullPointerException e) {
+//			System.out.println("EXCEPTION");
+//		}
+		//SWITCH PARENTS
+			if (parent.item.toString().equals(root.item.toString())) {
+				System.out.println("changedRoot");
+				changedRoot = true;
+				root.parent = y;
 				root = y;
-			} else if (temp.parent.left.item.toString().equals(temp.item.toString())) {
-				temp.parent.left = y;
-				y.parent = temp.parent;
-			} else {
-				temp.parent.right = y;
-				y.parent = temp.parent;
 			}
+			if(doubleParent != null) {
+				System.out.println("oh yes1: " + doubleParent.item);
+				if(doubleParent.left != null) {
+					System.out.println("oh yes2");
+					if (doubleParent.left.item.toString().compareTo(parent.item.toString()) == 0) {
+						System.out.println("DING2");
+						doubleParent.left = y;
+					}
+				}
+				if(doubleParent.right != null) {
+					System.out.println("oh yes3");
+					 if (doubleParent.right.item.toString().compareTo(parent.item.toString()) == 0){
+						 System.out.println("DING3");
+						 doubleParent.right = y;
+					 }
+				}
+				
+			}
+		} else if (y.parent == null) {
+			System.out.println("omw");
+			BinaryNode yRightChild = y.right;
+			
+			y.parent = yRightChild;
+			yRightChild.left = y;
+			y.right = null;
+			root = yRightChild;
+			root.parent = null;
+		}
+			
+	}
+	
+	public BinaryNode leftRotateCopy(BinaryNode n) {
+		if(n.right != null) {
+			BinaryNode rightChild = n.right;
+			n.right = rightChild.right;
+			rightChild.right = rightChild.left;
+			rightChild.left = n.left;
+			n.left = rightChild;
+			
+			String temp = n.item.toString();
+			n.item = rightChild.item;
+			rightChild.item = (Item) temp;
+			
+		}
+		return n;
 		
+	}
+	
 		
-//		Let P be Q's left child.
-//		Set Q's left child to be P's right child.
-//		[Set P's right-child's parent to Q]
-//		Set P's right child to be Q.
-//		[Set Q's parent to P]
-    } 
+	    void rightRotateTest(BinaryNode root) {
+	    	try {
+		    	BinaryNode rootLeftChild = root.left;
+		        root.left = rootLeftChild.right;
+		        rootLeftChild.right = root;
+		        root.parent = rootLeftChild;
+	    	}
+	    	catch(NullPointerException e) {
+	    		
+	    	}
+	    }
   
     
 	void scripted(){
@@ -252,24 +351,103 @@ public class NodeFactory2<Item>{
 	
 		insertRoot(b);
 		root.left = new BinaryNode(a, root, 1);
-		root.left.left = new BinaryNode(d, root.left, 3);
-		root.left.right = new BinaryNode(c, root.left, 3);
-		root.right = new BinaryNode(y, root.right, 3);
+		//root.left.left = new BinaryNode(d, root.left, 3);
+		//root.left.right = new BinaryNode(c, root.left, 3);
+		//root.right = new BinaryNode(y, root.right, 3);
 		//root.left.right.left = new BinaryNode(o, root.left.right, 4);
 		//root.left.left.right = new BinaryNode(p, root.left.left, 4);
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		for(int i = 0 ; i < 1000; i++) {
-			print2D(root);
-			rightRotate(root.left);
-			print2D(root);
-			leftRotate(root.right);
-			print2D(root);
-		}
-		//System.out.println("here is the prob: " + root.left.left.item.toString());
+		print2D(root);
+		rightRotate(root.left);
+		print2D(root);
+		leftRotate(root.right);
+		print2D(root);
+
 	}
 	
+
+
+	void LLRotate (BinaryNode curent) {
+		changedRoot = false;
+		BinaryNode tempRoot = root;
+		BinaryNode currentNode = curent;
+		while (currentNode != null) {
+
+			while(currentNode.left != null) {
+				System.out.println("AAA" + currentNode.left.item);
+				rightRotate(currentNode.left);
+				currentNode = currentNode.parent;
+				if(changedRoot == true) {
+					System.out.println("BBB");
+					LLRotate(root);
+					return;
+				}
+			}
+//			System.out.println("currently" + currentNode.item);
+//			System.out.println("_______________________");
+//			print2D(root);
+//			System.out.println("_______________________");
+			currentNode = currentNode.right;
+			nodeCount++;
+		}
+		
+	}
+	void t2v(BinaryNode root) {
+		BinaryNode tail = root;
+		BinaryNode rest = tail.right;
+		while (rest != null) {
+			if (rest.left == null) {
+				tail = rest;
+				rest = rest.right;
+			} else {
+				BinaryNode temp = rest.left;
+				rest.left = temp.right;
+				temp.right = rest;
+				rest = temp;
+				tail.right = temp;
+			}
+		}
+	}
+	
+	void rebuildTree() {
+		double expected = 2;
+		//double expected = (nodeCount - Math.pow(2,((Math.log(nodeCount) / Math.log(2)))));
+		System.out.println("   " + expected);
+		BinaryNode currentNode1 = root;
+		for(int i = 0; i< expected; i++) {
+			if(i==0) {
+				leftRotate(currentNode1);
+				currentNode1 = root;
+				print2D(root);
+				//System.out.println(root.right.item);
+			} else {
+				leftRotateCopy(currentNode1.right);
+				currentNode1 = currentNode1.right;
+			}
+		}
+		int count = nodeCount;
+		while (count > 1) {
+			count /= 2;
+			leftRotateCopy(root);
+			BinaryNode currentNode2 = root;
+			for(int i = 0; i < count - 1; i++) {
+				leftRotateCopy(currentNode2.right);
+				currentNode2 = currentNode2.right;
+			}
+		}
+		
+		
+		
+//		for(int i = 0; i <expected; i++) {
+//			newRoot = leftRoateCopy(newRoot);
+//			root = newRoot.right;
+//			for(int j = 0; j < nodeCount / 2 - 1; j++) {
+//				root = leftRoateCopy(root);
+//				root = root.right;
+//			}
+//			nodeCount >>=1;
+//		}
+//		print2D(root);
+
+	}
 }
+

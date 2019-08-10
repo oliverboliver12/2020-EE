@@ -5,7 +5,7 @@ Oliver Szavuj
 */
 import java.util.ArrayList;
 public class Main2{
-	public static final int COUNT = 4000; 
+	public static final int COUNT = 9; 
 	public static int used = 0;
 	public static void main(String [] args) {
 		
@@ -71,26 +71,21 @@ public class Main2{
 			}
 
 		}
-		nodes.printInorder(nodes.root);
+		//nodes.printInorder(nodes.root);
 		System.out.println();
 		System.out.println("Maximum depth: " + nodes.maxDepth);
 		nodes.print2D(nodes.root);
 		System.out.println("******************************************");
-		//nodes.print2D(nodes.root);
-		//nodes.rightRotate(nodes.root.left);
+
+		nodes.LLRotate(nodes.root);
 		nodes.print2D(nodes.root);
-		//nodes.print2D(nodes.root);
-		System.out.println("******************************************");
-		System.out.println("******************************************");
-		//nodes.scripted();
-		for(int i = 0; i < nodes.BinaryNodeArrayList.size(); i++)
-			System.out.println(nodes.BinaryNodeArrayList.get(i).item);
-        //root = tree.sortedArrayToBST(arr, 0, n - 1); 
-        //System.out.println("Preorder traversal of constructed BST"); 
-        //nodes.preOrder(nodes.root); 
-        
-        nodes.print2D(nodes.sortedListToBalancedTree(0,nodes.BinaryNodeArrayList.size()-1)); 
+		nodes.rebuildTree();
+		nodes.print2D(nodes.root);
+
+        //nodes.print2D(nodes.sortedListToBalancedTree(0,nodes.count)); 
 	}
+	
+	
 	public static int getRandomInt() {
 		int max = COUNT - used; 
         int min = 1; 
