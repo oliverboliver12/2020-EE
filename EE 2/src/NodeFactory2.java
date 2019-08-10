@@ -308,7 +308,7 @@ public class NodeFactory2<Item>{
 			
 	}
 	
-	public BinaryNode leftRotateCopy(BinaryNode n) {
+	public BinaryNode leftRotateAdapted(BinaryNode n) {
 		if(n.right != null) {
 			BinaryNode rightChild = n.right;
 			n.right = rightChild.right;
@@ -420,17 +420,17 @@ public class NodeFactory2<Item>{
 				print2D(root);
 				//System.out.println(root.right.item);
 			} else {
-				leftRotateCopy(currentNode1.right);
+				leftRotateAdapted(currentNode1.right);
 				currentNode1 = currentNode1.right;
 			}
 		}
 		int count = nodeCount; 
 		while (count > 1) {
 			count /= 2;
-			leftRotateCopy(root);
+			leftRotateAdapted(root);
 			BinaryNode currentNode2 = root;
 			for(int i = 0; i < count - 1; i++) {
-				leftRotateCopy(currentNode2.right);
+				leftRotateAdapted(currentNode2.right);
 				currentNode2 = currentNode2.right;
 			}
 		}
