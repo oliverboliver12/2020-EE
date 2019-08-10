@@ -17,7 +17,7 @@ public class Main2{
 			//nodes.insertStartRandom(nodes.root,Integer.toString(p++));
 			//nodes.insertStartRandom(nodes.root,stringarr[i]);
 		}
-		for(int i = 0; i<COUNT; i++) {
+		for(int i = 0; i<COUNT; i++) { 
 			int nextRand = getRandomInt();
 			contents.get(nextRand);
 			nodes.insertStartRandom(nodes.root,contents.get(nextRand),1);

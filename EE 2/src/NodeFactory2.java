@@ -424,7 +424,7 @@ public class NodeFactory2<Item>{
 				currentNode1 = currentNode1.right;
 			}
 		}
-		int count = nodeCount;
+		int count = nodeCount; 
 		while (count > 1) {
 			count /= 2;
 			leftRotateCopy(root);
