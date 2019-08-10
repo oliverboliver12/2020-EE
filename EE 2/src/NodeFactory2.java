@@ -109,7 +109,6 @@ public class NodeFactory2<Item>{
 		root.parent = null;
 		root.item = newItem;
 		root.height = 1;
-		System.out.println("wE IN");
 		maxDepth = 1;
 	}
 
@@ -197,7 +196,7 @@ public class NodeFactory2<Item>{
 				y.parent = parent.parent;
 				if(parent.parent != null) {
 					doubleParent = parent.parent;
-					System.out.println("ASSIGNED");
+					System.out.println("PARENT ASSIGNED");
 					System.out.println(doubleParent);
 				}
 				
@@ -206,7 +205,6 @@ public class NodeFactory2<Item>{
 			parent.left = null;
 			parent.left = yRightChild;
 			//yRightChild.parent = null;
-			//System.out.println("aaaaa" + yRightChild.parent.item);
 			if(yRightChild != null)
 				yRightChild.parent = parent;
 			y.right = parent;
@@ -225,16 +223,16 @@ public class NodeFactory2<Item>{
 			root = y;
 		}
 		if(doubleParent != null) {
-			System.out.println("oh yes1: " + doubleParent.item);
+			System.out.println("null1 entered: " + doubleParent.item);
 			if(doubleParent.left != null) {
-				System.out.println("oh yes2");
+				System.out.println("null2 entered");
 				if (doubleParent.left.item.toString().compareTo(parent.item.toString()) == 0) {
 					System.out.println("DING2");
 					doubleParent.left = y;
 				}
 			}
 			if(doubleParent.right != null) {
-				System.out.println("oh yes3");
+				System.out.println("null3 entered");
 				 if (doubleParent.right.item.toString().compareTo(parent.item.toString()) == 0){
 					 System.out.println("DING3");
 					 doubleParent.right = y;
@@ -254,7 +252,7 @@ public class NodeFactory2<Item>{
 			y.parent = parent.parent;
 			if(parent.parent != null) {
 				doubleParent = parent.parent;
-				System.out.println("ASSIGNED");
+				System.out.println("PARENT ASSIGNED");
 				System.out.println(doubleParent);
 			}
 			
@@ -263,7 +261,6 @@ public class NodeFactory2<Item>{
 		parent.right = null;
 		parent.right = yLeftChild;
 		//yRightChild.parent = null;
-		//System.out.println("aaaaa" + yRightChild.parent.item);
 		if(yLeftChild != null)
 			yLeftChild.parent = parent;
 		y.left = parent;
@@ -278,16 +275,16 @@ public class NodeFactory2<Item>{
 				root = y;
 			}
 			if(doubleParent != null) {
-				System.out.println("oh yes1: " + doubleParent.item);
+				System.out.println("null1 entered: " + doubleParent.item);
 				if(doubleParent.left != null) {
-					System.out.println("oh yes2");
+					System.out.println("null2 entered");
 					if (doubleParent.left.item.toString().compareTo(parent.item.toString()) == 0) {
 						System.out.println("DING2");
 						doubleParent.left = y;
 					}
 				}
 				if(doubleParent.right != null) {
-					System.out.println("oh yes3");
+					System.out.println("null3 entered");
 					 if (doubleParent.right.item.toString().compareTo(parent.item.toString()) == 0){
 						 System.out.println("DING3");
 						 doubleParent.right = y;
@@ -296,7 +293,6 @@ public class NodeFactory2<Item>{
 				
 			}
 		} else if (y.parent == null) {
-			System.out.println("omw");
 			BinaryNode yRightChild = y.right;
 			
 			y.parent = yRightChild;
