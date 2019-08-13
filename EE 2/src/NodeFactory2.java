@@ -14,7 +14,7 @@ public class NodeFactory2<Item>{
 	public int maxDepth;
 	public int spaceCount = 3; 
 	boolean changedRoot = false;
-	public ArrayList<BinaryNode> BinaryNodeArrayList = new ArrayList<BinaryNode>();
+	//public ArrayList<BinaryNode> BinaryNodeArrayList = new ArrayList<BinaryNode>();
 	int nodeCount = 0;
 	
 	
@@ -119,7 +119,7 @@ public class NodeFactory2<Item>{
             return; 
         printInorder(current.left);
         
-        BinaryNodeArrayList.add(current);
+        //BinaryNodeArrayList.add(current);
         pRoot.right = current;
   
         printInorder(current.right);
@@ -137,7 +137,8 @@ public class NodeFactory2<Item>{
 	        System.out.print(" ");  
 	    System.out.print(root.item );  
 	    
-	    print2DUtil(root.left, space);  
+	    print2DUtil(root.left, space); 
+	    System.out.print("\n"); 
 	}  
 	  
 	public void print2D(BinaryNode root){  
@@ -145,16 +146,16 @@ public class NodeFactory2<Item>{
 	} 
 
 	
-	BinaryNode sortedListToBalancedTree(int start, int end) { 
-		if (start > end) { 
-			return null; 
-		} 
-		int mid = (start + end) / 2; 
-        BinaryNode node = new BinaryNode(BinaryNodeArrayList.get(mid).item); 
-		node.left = sortedListToBalancedTree(start, mid - 1); 
-		node.right = sortedListToBalancedTree(mid + 1, end);   
-		return node; 
-    } 
+//	BinaryNode sortedListToBalancedTree(int start, int end) { 
+//		if (start > end) { 
+//			return null; 
+//		} 
+//		int mid = (start + end) / 2; 
+//        BinaryNode node = new BinaryNode(BinaryNodeArrayList.get(mid).item); 
+//		node.left = sortedListToBalancedTree(start, mid - 1); 
+//		node.right = sortedListToBalancedTree(mid + 1, end);   
+//		return node; 
+//    } 
   
       
 	//Flight stuff
@@ -176,16 +177,16 @@ public class NodeFactory2<Item>{
 //			}
 //		}
 	
-	public int max(int a, int b) { 
-        return (a > b) ? a : b; 
-    } 
-	public boolean checkConditions(BinaryNode pivot) {
-		if(pivot.parent != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	public int max(int a, int b) { 
+//        return (a > b) ? a : b; 
+//    } 
+//	public boolean checkConditions(BinaryNode pivot) {
+//		if(pivot.parent != null) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 	public void rightRotate(BinaryNode y) {
 		BinaryNode doubleParent = null;
 		BinaryNode parent = y.parent;
@@ -304,35 +305,44 @@ public class NodeFactory2<Item>{
 			
 	}
 	
-	public BinaryNode leftRotateAdapted(BinaryNode n) {
-		if(n.right != null) {
-			BinaryNode rightChild = n.right;
-			n.right = rightChild.right;
-			rightChild.right = rightChild.left;
-			rightChild.left = n.left;
-			n.left = rightChild;
-			
-			String temp = n.item.toString();
-			n.item = rightChild.item;
-			rightChild.item = (Item) temp;
-			
-		}
-		return n;
-		
-	}
+//	public BinaryNode leftRotateAdapted(BinaryNode n) {
+//		if(n.right != null) {
+//			BinaryNode rightChild = n.right;
+//			n.right = rightChild.right;
+//			rightChild.right = rightChild.left;
+//			rightChild.left = n.left;
+//			n.left = rightChild;
+//			
+//			String temp = n.item.toString();
+//			n.item = rightChild.item;
+//			rightChild.item = (Item) temp;
+//			
+//		}
+//		return n;
+//		
+//	}
 	
-		
-	    void rightRotateTest(BinaryNode root) {
-	    	try {
-		    	BinaryNode rootLeftChild = root.left;
-		        root.left = rootLeftChild.right;
-		        rootLeftChild.right = root;
-		        root.parent = rootLeftChild;
+	void rightRotateTest(BinaryNode root) {
+	    try {
+	    	BinaryNode rootLeftChild = root.left;
+	    	root.left = rootLeftChild.right;
+	    	rootLeftChild.right = root;
+	    	root.parent = rootLeftChild;
 	    	}
-	    	catch(NullPointerException e) {
-	    		
-	    	}
+	    catch(NullPointerException e) {
+	    
 	    }
+	}
+	    
+		public void rotateLeft(BinaryNode grandParent, BinaryNode parent, BinaryNode rightChild) {
+			if (null != grandParent) {
+				grandParent.right = rightChild;
+			} else {
+				root = rightChild;
+			}
+			parent.right = rightChild.left;
+			rightChild.left = parent;
+		}
   
     
 	void scripted(){
@@ -384,66 +394,107 @@ public class NodeFactory2<Item>{
 //			System.out.println("_______________________");
 			currentNode = currentNode.right;
 			nodeCount++;
-		}
-		
-	}
-	void t2v(BinaryNode root) {
-		BinaryNode tail = root;
-		BinaryNode rest = tail.right;
-		while (rest != null) {
-			if (rest.left == null) {
-				tail = rest;
-				rest = rest.right;
-			} else {
-				BinaryNode temp = rest.left;
-				rest.left = temp.right;
-				temp.right = rest;
-				rest = temp;
-				tail.right = temp;
-			}
-		}
+		}	
 	}
 	
-	void rebuildTree() {
-		double expected = 2;
-		//double expected = (nodeCount - Math.pow(2,((Math.log(nodeCount) / Math.log(2)))));
-		System.out.println("   " + expected);
-		BinaryNode currentNode1 = root;
-		for(int i = 0; i< expected; i++) {
-			if(i==0) {
-				leftRotate(currentNode1);
-				currentNode1 = root;
-				print2D(root);
-				//System.out.println(root.right.item);
-			} else {
-				leftRotateAdapted(currentNode1.right);
-				currentNode1 = currentNode1.right;
-			}
-		}
-		int count = nodeCount; 
-		while (count > 1) {
-			count /= 2;
-			leftRotateAdapted(root);
-			BinaryNode currentNode2 = root;
-			for(int i = 0; i < count - 1; i++) {
-				leftRotateAdapted(currentNode2.right);
-				currentNode2 = currentNode2.right;
-			}
-		}
-		
-		
-		
-//		for(int i = 0; i <expected; i++) {
-//			newRoot = leftRoateCopy(newRoot);
-//			root = newRoot.right;
-//			for(int j = 0; j < nodeCount / 2 - 1; j++) {
-//				root = leftRoateCopy(root);
-//				root = root.right;
+//	void t2v(BinaryNode root) {
+//		BinaryNode tail = root;
+//		BinaryNode rest = tail.right;
+//		while (rest != null) {
+//			if (rest.left == null) {
+//				tail = rest;
+//				rest = rest.right;
+//			} else {
+//				BinaryNode temp = rest.left;
+//				rest.left = temp.right;
+//				temp.right = rest;
+//				rest = temp;
+//				tail.right = temp;
 //			}
-//			nodeCount >>=1;
 //		}
-//		print2D(root);
-
+//	}
+	
+//	void rebuildTree() {
+//		double expected = 2;
+//		//double expected = (nodeCount - Math.pow(2,((Math.log(nodeCount) / Math.log(2)))));
+//		System.out.println("   " + expected);
+//		BinaryNode currentNode1 = root;
+//		for(int i = 0; i< expected; i++) {
+//			if(i==0) {
+//				leftRotate(currentNode1);
+//				currentNode1 = root;
+//				print2D(root);
+//				//System.out.println(root.right.item);
+//			} else {
+//				leftRotateAdapted(currentNode1.right);
+//				currentNode1 = currentNode1.right;
+//			}
+//		}
+//		int count = nodeCount; 
+//		while (count > 1) {
+//			count /= 2;
+//			leftRotateAdapted(root);
+//			BinaryNode currentNode2 = root;
+//			for(int i = 0; i < count - 1; i++) {
+//				leftRotateAdapted(currentNode2.right);
+//				currentNode2 = currentNode2.right;
+//			}
+//		}
+//		
+//		
+//		
+////		for(int i = 0; i <expected; i++) {
+////			newRoot = leftRoateCopy(newRoot);
+////			root = newRoot.right;
+////			for(int j = 0; j < nodeCount / 2 - 1; j++) {
+////				root = leftRoateCopy(root);
+////				root = root.right;
+////			}
+////			nodeCount >>=1;
+////		}
+////		print2D(root);
+//
+//	}
+	
+	public void createPerfectBST(){
+		int m = greatestPowerOf2LessThanN(nodeCount + 1) - 1;
+		makeRotations(nodeCount - m);
+		while (m > 1)
+			makeRotations(m /= 2);
 	}
+		 
+	private int greatestPowerOf2LessThanN(int n){
+		int x = MSB(n);//MSB
+		return (1 << x);//2^x
+	}
+		 
+	public int MSB(int n){
+		int ndx = 0;
+		while (1 < n) {
+			n = (n >> 1);
+			ndx++;
+		}
+		return ndx;
+	}
+	
+	public void makeRotations(int bound){
+		BinaryNode grandParent = null;
+		BinaryNode parent = root;
+		BinaryNode child = root.right;
+		for (; bound > 0; bound--) {
+			try {
+				if (null != child) {
+					rotateLeft(grandParent, parent, child);
+					grandParent = child;
+					parent = grandParent.right;
+					child = parent.right;
+					} else {
+						break;
+					}
+				} catch (NullPointerException e) {
+					break;
+					}
+			}
+		}
 }
 
