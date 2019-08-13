@@ -10,7 +10,6 @@ Oliver Szavuj
 
 public class NodeFactory2<Item>{
 	public BinaryNode root;
-	public int depth;
 	public int maxDepth;
 	public int spaceCount = 3; 
 	boolean changedRoot = false;
@@ -370,21 +369,19 @@ public class NodeFactory2<Item>{
 
 	}
 	
-
-
-	void LLRotate (BinaryNode curent) {
+	void treeToVine (BinaryNode curent) {
 		changedRoot = false;
 		BinaryNode tempRoot = root;
 		BinaryNode currentNode = curent;
 		while (currentNode != null) {
 
 			while(currentNode.left != null) {
-				System.out.println("AAA" + currentNode.left.item);
+				System.out.println("currently" + currentNode.left.item);
 				rightRotate(currentNode.left);
 				currentNode = currentNode.parent;
 				if(changedRoot == true) {
-					System.out.println("BBB");
-					LLRotate(root);
+					System.out.println("skipped");
+					treeToVine(root);
 					return;
 				}
 			}
@@ -456,7 +453,7 @@ public class NodeFactory2<Item>{
 //
 //	}
 	
-	public void createPerfectBST(){
+	public void vineToBST(){
 		int m = greatestPowerOf2LessThanN(nodeCount + 1) - 1;
 		makeRotations(nodeCount - m);
 		while (m > 1)
@@ -464,23 +461,23 @@ public class NodeFactory2<Item>{
 	}
 		 
 	private int greatestPowerOf2LessThanN(int n){
-		int x = MSB(n);//MSB
-		return (1 << x);//2^x
+		int x = MSB(n);
+		return (1 << x);
 	}
 		 
 	public int MSB(int n){
-		int ndx = 0;
+		int index = 0;
 		while (1 < n) {
 			n = (n >> 1);
-			ndx++;
+			index++;
 		}
-		return ndx;
+		return index;
 	}
 	
 	public void makeRotations(int bound){
-		BinaryNode grandParent = null;
 		BinaryNode parent = root;
 		BinaryNode child = root.right;
+		BinaryNode grandParent = null;
 		for (; bound > 0; bound--) {
 			try {
 				if (null != child) {
@@ -497,4 +494,3 @@ public class NodeFactory2<Item>{
 			}
 		}
 }
-

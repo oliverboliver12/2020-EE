@@ -5,7 +5,7 @@ Oliver Szavuj
 */
 import java.util.ArrayList;
 public class Main2{
-	public static final int COUNT =50000; 
+	public static final int COUNT =20000; 
 	public static int used = 0;
 	public static void main(String [] args) {
 		
@@ -77,9 +77,9 @@ public class Main2{
 		nodes.print2D(nodes.root);
 		System.out.println("******************************************");
 
-		nodes.LLRotate(nodes.root);
+		nodes.treeToVine(nodes.root);
 		//nodes.print2D(nodes.root);
-		nodes.createPerfectBST();
+		nodes.vineToBST();
 		System.out.println("Balanced Tree: ******************************************");
 		nodes.print2D(nodes.root);
 
