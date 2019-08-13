@@ -5,7 +5,7 @@ Oliver Szavuj
 */
 import java.util.ArrayList;
 public class Main2{
-	public static final int COUNT =20000; 
+	public static final int COUNT =50000; 
 	public static int used = 0;
 	public static void main(String [] args) {
 		

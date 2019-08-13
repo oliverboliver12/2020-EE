@@ -382,7 +382,7 @@ public class NodeFactory2<Item>{
 				if(changedRoot == true) {
 					System.out.println("skipped");
 					treeToVine(root);
-					return;
+					return; 
 				}
 			}
 //			System.out.println("currently" + currentNode.item);
