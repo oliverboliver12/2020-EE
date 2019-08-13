@@ -6,7 +6,7 @@ Oliver Szavuj
 import java.util.ArrayList;
 public class Main2{
 	public static final int COUNT =50000; 
-	public static int used = 0;
+	public static int used = 0; 
 	public static void main(String [] args) {
 		
 		//String stringarr[] = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"};
