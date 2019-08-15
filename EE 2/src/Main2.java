@@ -15,7 +15,6 @@ public class Main2{
 		for(int i = 0; i<=COUNT; i++) {
 			contents.add(Integer.toString(i));
 			//nodes.insertStartRandom(nodes.root,Integer.toString(p++));
-			
 			//nodes.insertStartRandom(nodes.root,stringarr[i]);
 		}
 		for(int i = 0; i<COUNT; i++) { 
