@@ -384,6 +384,7 @@ public class NodeFactory2<Item>{
 					treeToVine(root);
 					return; 
 				} 
+				
 			}
 //			System.out.println("currently" + currentNode.item);
 //			System.out.println("_______________________");

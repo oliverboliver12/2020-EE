@@ -18,7 +18,6 @@ public class Main2{
 			
 			//nodes.insertStartRandom(nodes.root,stringarr[i]);
 		}
-		
 		for(int i = 0; i<COUNT; i++) { 
 			int nextRand = getRandomInt();
 			contents.get(nextRand);
