@@ -383,7 +383,7 @@ public class NodeFactory2<Item>{
 					System.out.println("skipped");
 					treeToVine(root);
 					return;
-				}
+				} 
 			}
 //			System.out.println("currently" + currentNode.item);
 //			System.out.println("_______________________");
