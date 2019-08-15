@@ -385,7 +385,6 @@ public class NodeFactory2<Item>{
 					return; 
 				} 
 			}
-			
 //			System.out.println("currently" + currentNode.item);
 //			System.out.println("_______________________");
 //			print2D(root);
