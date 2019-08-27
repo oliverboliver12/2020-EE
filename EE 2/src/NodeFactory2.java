@@ -179,7 +179,7 @@ public class NodeFactory2<Item>{
 		pivot.right = parent;
 
 		if (parent.item.toString().equals(root.item.toString())) {
-			System.out.println("changedRoot"); 
+			System.out.println("changedRoot");
 			changedRoot = true;
 			root.parent = pivot;
 			root = pivot;
