@@ -44,68 +44,40 @@ public class NodeFactory2<Item>{
 	}
 
 
-	public void insertStartRandom(BinaryNode currentNode, Item newItem, int depth) {
+	public void insert(BinaryNode currentNode, Item newItem, int depth) {
 		depth++;
 		if(root == null) {
 			insertRoot(newItem);
 			return;
 		}
-//        int max = 1; 
-//        int min = 0; 
-//        int range = max - min + 1; 
-//  
-//		int rand = (int)(Math.random() * range) + min; 
-		//System.out.println(rand);
 		if(Integer.valueOf(currentNode.item.toString()) > Integer.valueOf(newItem.toString())) {
 			if (currentNode.left != null) {
-				insertStartRandom(currentNode.left, newItem, depth);
+				insert(currentNode.left, newItem, depth);
 			} else {
-				if(Integer.valueOf(currentNode.item.toString()) > Integer.valueOf(newItem.toString())) {
-					currentNode.left = new BinaryNode(newItem, currentNode, depth);
-					if (depth>maxDepth) {
-						maxDepth = depth;
-					}
-					depth = 1;
-					return;
+				currentNode.left = new BinaryNode(newItem, currentNode, depth);
+				if (depth>maxDepth) {
+					maxDepth = depth;
 				}
-				else if(Integer.valueOf(currentNode.item.toString()) < Integer.valueOf(newItem.toString())) {
-					currentNode.right = new BinaryNode(newItem, currentNode, depth);
-					if (depth>maxDepth) {
-						maxDepth = depth;
-					}
-					depth = 1;
-					return;
-				}
+				depth = 1;
+				return;
 			}
 		}
 		else if(Integer.valueOf(currentNode.item.toString()) < Integer.valueOf(newItem.toString())) {
 			if (currentNode.right != null) {
-				insertStartRandom(currentNode.right, newItem, depth);
+				insert(currentNode.right, newItem, depth);
 			} else {
-				if(Integer.valueOf(currentNode.item.toString()) > Integer.valueOf(newItem.toString())) {
-					currentNode.left = new BinaryNode(newItem, currentNode, depth);
-					if (depth>maxDepth) {
-						maxDepth = depth;
-					}
-					depth = 1;
-					return;
+				currentNode.right = new BinaryNode(newItem, currentNode, depth);
+				if (depth>maxDepth) {
+					maxDepth = depth;
 				}
-				else if(Integer.valueOf(currentNode.item.toString()) < Integer.valueOf(newItem.toString())) {
-					currentNode.right = new BinaryNode(newItem, currentNode, depth);
-					if (depth>maxDepth) {
-						maxDepth = depth;
-					}
-					depth = 1;
-					return;
-				}
+				depth = 1;
+				return;
 			}
 		}
-		
 	}
 	
 	public void insertRoot(Item newItem) {
 		root = new BinaryNode();
-		root.parent = null;
 		root.item = newItem;
 		root.height = 1;
 		maxDepth = 1;
@@ -186,32 +158,67 @@ public class NodeFactory2<Item>{
 //			return false;
 //		}
 //	}
-	public void rightRotate(BinaryNode y) {
+	
+	
+	public void rightRotate(BinaryNode pivot) {
+		BinaryNode doubleParent = null;
+		BinaryNode parent = pivot.parent;
+		BinaryNode pivotRightChild = pivot.right;
+		
+		if(pivot.parent != null) {
+			pivot.parent = parent.parent;
+			if(parent.parent != null) {
+				doubleParent = parent.parent;
+			}	
+		}
+		parent.parent  = pivot;
+		parent.left = null;
+		parent.left = pivotRightChild;//will be null if pivotRightChild is null
+		if(pivotRightChild != null)//only will be entered in there is a pivotRightChild to be assigned
+			pivotRightChild.parent = parent;
+		pivot.right = parent;
+
+		if (parent.item.toString().equals(root.item.toString())) {
+			System.out.println("changedRoot");
+			changedRoot = true;
+			root.parent = pivot;
+			root = pivot;
+		}
+		else if(doubleParent != null) {
+			if(doubleParent.left != null) {
+				if (doubleParent.left.item.toString().equals(parent.item.toString())) 
+					doubleParent.left = pivot;
+			}
+			else if(doubleParent.right != null) {
+				doubleParent.right = pivot;
+			}
+		}	
+	}
+
+	
+	
+	public void leftRotate(BinaryNode y) {
 		BinaryNode doubleParent = null;
 		BinaryNode parent = y.parent;
-		BinaryNode yRightChild = y.right;
+		BinaryNode yLeftChild = y.left;
 		
 //		try {
-			if(y.parent != null) {
-				y.parent = parent.parent;
-				if(parent.parent != null) {
-					doubleParent = parent.parent;
-					System.out.println("PARENT ASSIGNED");
-					System.out.println(doubleParent);
-				}
-				
+		if(y.parent != null) {
+			y.parent = parent.parent;
+			if(parent.parent != null) {
+				doubleParent = parent.parent;
+				System.out.println("PARENT ASSIGNED");
+				System.out.println(doubleParent);
 			}
-			parent.parent  = y;
-			parent.left = null;
-			parent.left = yRightChild;
-			//yRightChild.parent = null;
-			if(yRightChild != null)
-				yRightChild.parent = parent;
-			y.right = parent;
-			//yRightChild = parent;
-			//y.right.right.parent = y.right;
-			//y.right.left.parent = y.right;
-			//C is free of A
+			
+		
+		parent.parent  = y;
+		parent.right = null;
+		parent.right = yLeftChild;
+		//yRightChild.parent = null;
+		if(yLeftChild != null)
+			yLeftChild.parent = parent;
+		y.left = parent;
 //		} catch(NullPointerException e) {
 //			System.out.println("EXCEPTION");
 //		}
@@ -240,58 +247,6 @@ public class NodeFactory2<Item>{
 			}
 			
 		}
-		
-	}
-	public void leftRotate(BinaryNode y) {
-		BinaryNode doubleParent = null;
-		BinaryNode parent = y.parent;
-		BinaryNode yLeftChild = y.left;
-		
-//		try {
-		if(y.parent != null) {
-			y.parent = parent.parent;
-			if(parent.parent != null) {
-				doubleParent = parent.parent;
-				System.out.println("PARENT ASSIGNED");
-				System.out.println(doubleParent);
-			}
-			
-		
-		parent.parent  = y;
-		parent.right = null;
-		parent.right = yLeftChild;
-		//yRightChild.parent = null;
-		if(yLeftChild != null)
-			yLeftChild.parent = parent;
-		y.left = parent;
-//		} catch(NullPointerException e) {
-//			System.out.println("EXCEPTION");
-//		}
-		//SWITCH PARENTS
-			if (parent.item.toString().equals(root.item.toString())) {
-				System.out.println("changedRoot");
-				changedRoot = true;
-				root.parent = y;
-				root = y;
-			}
-			if(doubleParent != null) {
-				System.out.println("null1 entered: " + doubleParent.item);
-				if(doubleParent.left != null) {
-					System.out.println("null2 entered");
-					if (doubleParent.left.item.toString().compareTo(parent.item.toString()) == 0) {
-						System.out.println("DING2");
-						doubleParent.left = y;
-					}
-				}
-				if(doubleParent.right != null) {
-					System.out.println("null3 entered");
-					 if (doubleParent.right.item.toString().compareTo(parent.item.toString()) == 0){
-						 System.out.println("DING3");
-						 doubleParent.right = y;
-					 }
-				}
-				
-			}
 		} else if (y.parent == null) {
 			BinaryNode yRightChild = y.right;
 			
@@ -300,8 +255,7 @@ public class NodeFactory2<Item>{
 			y.right = null;
 			root = yRightChild;
 			root.parent = null;
-		}
-			
+		}		
 	}
 	
 //	public BinaryNode leftRotateAdapted(BinaryNode n) {
@@ -321,27 +275,30 @@ public class NodeFactory2<Item>{
 //		
 //	}
 	
-	void rightRotateTest(BinaryNode root) {
+	void rightRotateSimplified(BinaryNode pivot) {
 	    try {
-	    	BinaryNode rootLeftChild = root.left;
-	    	root.left = rootLeftChild.right;
-	    	rootLeftChild.right = root;
-	    	root.parent = rootLeftChild;
+		    	BinaryNode root = pivot.parent;
+		    	BinaryNode pivotRightChild = pivot.right;
+		    	pivot.parent = root.parent;
+		    	pivotRightChild.parent = root;
+		    	root.left = pivotRightChild;
+		    	pivot.right = root;
+		    	root.parent = pivot;
 	    	}
 	    catch(NullPointerException e) {
 	    
 	    }
 	}
 	    
-		public void rotateLeft(BinaryNode grandParent, BinaryNode parent, BinaryNode rightChild) {
-			if (null != grandParent) {
-				grandParent.right = rightChild;
-			} else {
-				root = rightChild;
-			}
-			parent.right = rightChild.left;
-			rightChild.left = parent;
+	public void leftRotate(BinaryNode grandParent, BinaryNode parent, BinaryNode rightChild) {
+		if (null != grandParent) {
+			grandParent.right = rightChild;
+		} else {
+			root = rightChild;
 		}
+		parent.right = rightChild.left;
+		rightChild.left = parent;
+	}
   
     
 	void scripted(){
@@ -356,14 +313,14 @@ public class NodeFactory2<Item>{
 	
 		insertRoot(b);
 		root.left = new BinaryNode(a, root, 1);
-		//root.left.left = new BinaryNode(d, root.left, 3);
-		//root.left.right = new BinaryNode(c, root.left, 3);
-		//root.right = new BinaryNode(y, root.right, 3);
+		root.left.left = new BinaryNode(d, root.left, 3);
+		root.left.right = new BinaryNode(c, root.left, 3);
+		root.right = new BinaryNode(y, root.right, 3);
 		//root.left.right.left = new BinaryNode(o, root.left.right, 4);
 		//root.left.left.right = new BinaryNode(p, root.left.left, 4);
 		print2D(root);
-		rightRotate(root.left);
-		print2D(root);
+		rightRotateSimplified(root.left);
+		print2D(root.parent);
 		leftRotate(root.right);
 		print2D(root);
 
@@ -371,25 +328,22 @@ public class NodeFactory2<Item>{
 	
 	void treeToVine (BinaryNode curent) {
 		changedRoot = false;
-		BinaryNode tempRoot = root;
 		BinaryNode currentNode = curent;
 		while (currentNode != null) {
-
 			while(currentNode.left != null) {
-				System.out.println("currently" + currentNode.left.item);
 				rightRotate(currentNode.left);
 				currentNode = currentNode.parent;
 				if(changedRoot == true) {
 					System.out.println("skipped");
+					changedRoot = false;
 					treeToVine(root);
 					return; 
-				} 
-				
+				} 	
 			}
-//			System.out.println("currently" + currentNode.item);
-//			System.out.println("_______________________");
-//			print2D(root);
-//			System.out.println("_______________________");
+			System.out.println("currently" + currentNode.item);
+			System.out.println("_______________________");
+			print2D(root);
+			//System.out.println("_______________________");
 			currentNode = currentNode.right;
 			nodeCount++;
 		}	
@@ -482,7 +436,7 @@ public class NodeFactory2<Item>{
 		for (; bound > 0; bound--) {
 			try {
 				if (null != child) {
-					rotateLeft(grandParent, parent, child);
+					leftRotate(grandParent, parent, child);
 					grandParent = child;
 					parent = grandParent.right;
 					child = parent.right;

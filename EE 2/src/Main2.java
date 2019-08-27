@@ -5,7 +5,7 @@ Oliver Szavuj
 */
 import java.util.ArrayList;
 public class Main2{
-	public static final int COUNT =50000; 
+	public static final int COUNT =100; 
 	public static int used = 0;
 	public static void main(String [] args) {
 		
@@ -20,7 +20,7 @@ public class Main2{
 		for(int i = 0; i<COUNT; i++) { 
 			int nextRand = getRandomInt();
 			contents.get(nextRand);
-			nodes.insertStartRandom(nodes.root,contents.get(nextRand),1);
+			nodes.insert(nodes.root,contents.get(nextRand),1);
 			contents.remove(nextRand);
 		}
 		
@@ -79,11 +79,14 @@ public class Main2{
 
 		nodes.treeToVine(nodes.root);
 		//nodes.print2D(nodes.root);
+		System.out.println("******************************************");
 		nodes.vineToBST();
 		System.out.println("Balanced Tree: ******************************************");
 		nodes.print2D(nodes.root);
+		System.out.println("root " + nodes.root.item);
 
         //nodes.print2D(nodes.sortedListToBalancedTree(0,nodes.count)); 
+		nodes.scripted();
 	}
 	
 	
