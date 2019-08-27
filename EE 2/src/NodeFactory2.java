@@ -167,7 +167,7 @@ public class NodeFactory2<Item>{
 		
 		if(pivot.parent != null) {
 			pivot.parent = parent.parent;
-			if(parent.parent != null) { 
+			if(parent.parent != null) {
 				doubleParent = parent.parent;
 			}	
 		}
