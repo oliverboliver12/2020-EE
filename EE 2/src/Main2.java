@@ -5,11 +5,11 @@ Oliver Szavuj
 */
 import java.util.ArrayList;
 public class Main2{
-	public static final int COUNT = 100000; 
-	public static final int SEARCH_COUNT = 100000;
+	public static final int COUNT = 1000; 
+	public static final int SEARCH_COUNT = 100;
 	public static int used = 0;
 	public static void main(String [] args) {
-		for(int x = 0; x < 100; x++) {
+//		for(int x = 0; x < 100; x++) {
 			
 			//String stringarr[] = {"a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"};
 			NodeFactory2<String> nodes = new NodeFactory2<String>();
@@ -58,7 +58,7 @@ public class Main2{
 		//					System.out.println("left right right 3" + nodes.root.left.right.right.item);
 		//				}
 		//			}
-		//
+		// 
 		//		}
 		//		if(nodes.root.right != null) {
 		//			System.out.println("right1" + nodes.root.right.item);
@@ -88,22 +88,28 @@ public class Main2{
 			//nodes.print2D(nodes.root);
 			//System.out.println("******************************************");
 			
-			long startShort = System.nanoTime();
+			long startUnbalanced = System.nanoTime();
 			for(int i = 0; i < SEARCH_COUNT; i++) {
 				//System.out.println("searching for" + searchOrder.get(i));
 				nodes.search(searchOrder.get(i));
 			}
-			long finishShort = System.nanoTime();
-			long timeElapsed = finishShort - startShort;
-			System.out.println("unbalanced search:  " + timeElapsed);
+			long finishUnbalaced = System.nanoTime();
+			long timeElapsedUnbalanced = finishUnbalaced - startUnbalanced;
+			System.out.println("unbalanced search:  " + timeElapsedUnbalanced);
 			
+			long startT2V = System.nanoTime();
 			long startLong = System.nanoTime();
+			
+			//nodes.print2D(nodes.root);
 			nodes.treeToVine(nodes.root);
+			long finishT2V = System.nanoTime();
 			//nodes.print2D(nodes.root);
 			//System.out.println("******************************************");
+			long startV2T = System.nanoTime();
 			nodes.vineToBST();
+			long finishV2T = System.nanoTime();
 			//System.out.println("Balanced Tree: ******************************************");
-			//nodes.print2D(nodes.root);
+			nodes.print2D(nodes.root);
 			//System.out.println("root " + nodes.root.item);
 			
 		
@@ -111,14 +117,16 @@ public class Main2{
 				//System.out.println("searching for" + searchOrder.get(i));
 				nodes.search(searchOrder.get(i));
 			}
-			long finishLong = System.nanoTime();
-			long timeElapsed2 = finishLong - startLong;
-			System.out.println("balance and search: " + timeElapsed2);
-			System.out.println((double)timeElapsed/(double)timeElapsed2);
+			long finishBlanaced = System.nanoTime();
+			long timeElapsedBalanced = finishBlanaced - startLong;
+			long timeElapsedT2V = finishT2V - startT2V;
+			long timeElapsedV2T = finishV2T - startV2T;
+			System.out.println("balance and search: " + timeElapsedBalanced + "  T2V:" + timeElapsedT2V + "  V2T:" + timeElapsedV2T);
+			System.out.println("ratio: "+ (double)timeElapsedUnbalanced/(double)timeElapsedBalanced);
 		    //nodes.print2D(nodes.sortedListToBalancedTree(0,nodes.count)); 
 			//nodes.scripted();
 			used = 0;
-		}
+//		}
 	}
 	
 	

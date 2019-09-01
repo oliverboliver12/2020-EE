@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Stack;
-
 /*Program Information
 Author:
 Oliver Szavuj
@@ -145,38 +142,34 @@ public class NodeFactory2<Item>{
 	
 	
 	public void rightRotate(BinaryNode pivot) {
-		BinaryNode doubleParent = null;
 		BinaryNode parent = pivot.parent;
 		BinaryNode pivotRightChild = pivot.right;
-		
-		if(pivot.parent != null) {
-			pivot.parent = parent.parent;
-			if(parent.parent != null) {
-				doubleParent = parent.parent;
-			}	
+		BinaryNode grandParent = null;
+		if(parent.parent != null) {
+			grandParent = parent.parent;
 		}
+
+		pivot.parent = parent.parent;
 		parent.parent  = pivot;
 		parent.left = null;
 		parent.left = pivotRightChild;//will be null if pivotRightChild is null
 		if(pivotRightChild != null)//only will be entered in there is a pivotRightChild to be assigned
 			pivotRightChild.parent = parent;
 		pivot.right = parent;
-
-		if (parent.item.toString().equals(root.item.toString())) {
-			//System.out.println("changedRoot");
-			changedRoot = true;
+		
+		if(grandParent != null) {
+			if(grandParent.left != null) {
+				if (grandParent.left.item.toString().equals(parent.item.toString())) 
+					grandParent.left = pivot;
+			}
+			else{
+				grandParent.right = pivot;
+			}
+		}
+		else if(parent.item.toString().equals(root.item.toString())) {
 			root.parent = pivot;
 			root = pivot;
 		}
-		else if(doubleParent != null) {
-			if(doubleParent.left != null) {
-				if (doubleParent.left.item.toString().equals(parent.item.toString())) 
-					doubleParent.left = pivot;
-			}
-			else if(doubleParent.right != null) {
-				doubleParent.right = pivot;
-			}
-		}	
 	}
 
 	
@@ -303,9 +296,9 @@ public class NodeFactory2<Item>{
 		//root.left.right.left = new BinaryNode(o, root.left.right, 4);
 		//root.left.left.right = new BinaryNode(p, root.left.left, 4);
 		print2D(root);
-		rightRotateSimplified(root.left);
+		//rightRotateSimplified(root.left);
 		print2D(root.parent);
-		leftRotate(root.right);
+		//leftRotate(root.right);
 		print2D(root);
 
 	}
@@ -325,27 +318,23 @@ public class NodeFactory2<Item>{
 		}
 	}
 	void treeToVine (BinaryNode curent) {
-		changedRoot = false;
 		BinaryNode currentNode = curent;
 		while (currentNode != null) {
+			
 			while(currentNode.left != null) {
 				rightRotate(currentNode.left);
 				currentNode = currentNode.parent;
-				
-				if(changedRoot == true) {
-					//System.out.println("skipped");
-					changedRoot = false;
-					treeToVine(root);
-					return; 
-				} 	
+//				System.out.println("currently" + currentNode.item);
+//				System.out.println("_______________________");
+//				print2D(root);
+//				System.out.println("_______________________");
 			}
-			//System.out.println("currently" + currentNode.item);
-			//System.out.println("_______________________");
-			//print2D(root);
-			//System.out.println("_______________________");
+			
+	
 			currentNode = currentNode.right;
 			nodeCount++;
 		}	
+		System.out.println(nodeCount);
 	}
 	
 //	void t2v(BinaryNode root) {
@@ -408,43 +397,30 @@ public class NodeFactory2<Item>{
 //	}
 	
 	public void vineToBST(){
-		int m = greatestPowerOf2LessThanN(nodeCount + 1) - 1;
-		makeRotations(nodeCount - m);
-		while (m > 1)
-			makeRotations(m /= 2);
+		int log2Val = greatestPower2LessN(nodeCount + 1) - 1;
+		makeRotations(nodeCount - log2Val);
+		while (log2Val > 1)
+			makeRotations(log2Val /= 2);
 	}
-		 
-	private int greatestPowerOf2LessThanN(int n){
-		int x = MSB(n);
-		return (1 << x);
-	}
-		 
-	public int MSB(int n){
-		int index = 0;
-		while (1 < n) {
-			n = (n >> 1);
-			index++;
-		}
-		return index;
-	}
+	
+	public int greatestPower2LessN(int n){
+		int p = (int)(Math.log(n)/Math.log(2));
+		return (int)Math.pow(2, p);
+	} 
 	
 	public void makeRotations(int bound){
 		BinaryNode parent = root;
 		BinaryNode child = root.right;
 		BinaryNode grandParent = null;
-		for (; bound > 0; bound--) {
-			try {
-				if (null != child) {
-					leftRotate(grandParent, parent, child);
-					grandParent = child;
-					parent = grandParent.right;
-					child = parent.right;
-					} else {
-						break;
-					}
-				} catch (NullPointerException e) {
-					break;
-					}
+		for (; bound > 0; bound--) { 
+			if (null != child) {
+				leftRotate(grandParent, parent, child);
+				grandParent = child;
+				parent = grandParent.right;
+				child = parent.right;
+			} else {
+				break;
 			}
 		}
+	}
 }
